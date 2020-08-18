@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>To Do List Vue</title>
+    <!-- BootStrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <!-- FontAwesome v5.2 CDN  -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Raleway:wght@500&family=Red+Rose&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+			font-family: 'Raleway', sans-serif;
+			background-image: url(https://images.unsplash.com/photo-1524678714210-9917a6c619c2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2249&q=80);
+			background-size: cover;
+            background-attachment: fixed;
+			font-size: 25px;
+		}
+        #div {
+			text-align: center;
+        }
+        /* Ordered list */
+        li::before {
+            content: counter(li);
+            color: black;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1.5em;
+            margin-right: .05em;
+            margin-bottom: 5px;
+            text-align: right;
+            direction: rtl;
+        }
+        li {
+            counter-increment: li;
+            text-align: left;
+            color: #f4acb7;
+            font-size: 30px;
+        }
+        ol {
+            list-style: none;
+        }
+        /* Titles */
+		.header1 {
+            font-family: 'Red Rose', cursive;
+			font-size: 100px;
+			color: #98c1d9;
+			text-align: center;
+            text-decoration: underline;
+		}
+		.header2 {
+            font-family: 'Red Rose', cursive;
+			text-align: center;
+			font-size: 100px;
+			color: #f4acb7;
+            text-decoration: underline;
+        }
+        /* Input Box */
+		#new {
+			font-size: 30px;
+            margin-top: 60px;
+            font-family: 'Indie Flower', cursive;
+            height: 75px;
+            width: 900px;
+        }
+        /* Buttons */
+		#SaveButton {
+			font-size: 25px;
+			margin-top: 50px;
+            background-color: #386641;
+            color: #ffffff;
+		}
+		#ClearList {
+			font-size: 25px;
+            background-color: #d80032;
+            color: #ffffff;
+            margin-top: 60px;
+		}
+        #delete {
+            background-color: #d80032;
+            color: white;
+            border-radius: 8px;
+            font-size: 10px;
+            margin-left: 15px;
+        }
+        /* External Elements */
+        #checkbox {
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+            background-color: #386641;
+            color: #386641;
+        }
+        .fa-smile {
+            color:#386641;
+            font-size: 25px;
+            margin-left: 10px;
+        }
+        .fa-tired {
+            color: #3a6ea5;
+            font-size: 25px;
+            margin-left: 10px;
+        }
+        .task-done {
+            text-decoration: line-through;
+            color: #386641;
+        }
+    </style>
+</head>
+<body>
+
+ <div id="app">
+    <div class="container-fluid" id="div">
+        <div class="row">
+            <div class="col-lg-6">
+                <div>
+                    <span class="header1">My To-Do List</span>
+                </div>
+                <div>
+                    <input v-model="newTask" placeholder="Enter new task here"  v-on:keyup.enter="saveTask()" id="new"></input>
+                </div>
+                <div>
+                    <button type="button" v-on:click="saveTask()" id="SaveButton">Submit Task</button>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <span class="header2">Current To-Do List</span>
+                <ol>
+                    <li v-for="task in tasks"> 
+                        <button type="button" v-on:click="deleteTask(task)" id="delete">Delete Task</button>
+                        <span>&DoubleRightArrow;</span>
+                        <i v-bind:class="task.done ? 'fas fa-smile' : 'fas fa-tired'"></i>
+                        <input type="checkbox" v-model="task.done" id="checkbox">
+                        <span v-bind:class="task.done ? 'task-done' : 'task-todo'">
+                            {{ task.subject }}
+                        </span> 
+                    </li>
+                </ol>
+
+                <button type="button" v-on:click="clearAll()" id="ClearList">Clear List</button>
+            </div>
+         </div>
+    </div>
+</div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                newTask: null,
+                tasks: [],
+                saveTask: function() {
+                    if (this.newTask == null) {
+                        alert('Enter a task!');
+                        return;
+                    }
+                    this.tasks.push({
+                        done: false,
+                        subject: this.newTask
+                    });
+                    this.newTask = null;
+                },
+                deleteTask: function(task) {
+                    this.tasks = this.tasks.filter(function(e) {
+                        return e.subject != task.subject;
+                    });
+                },
+                clearAll: function() {
+                    this.tasks = [];
+                }
+            }
+        });
+    </script>
+</body>
+</html>
